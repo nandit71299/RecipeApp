@@ -1,8 +1,12 @@
 import axios from "axios";
 
-const API_DOMAIN = `${import.meta.env.VITE_BACKEND_URI}`;
-const API_PORT = `${import.meta.env.VITE_BACKEND_PORT}`;
-const API_BASE_URL = `${API_DOMAIN}${API_PORT ? `:${API_PORT}` : ""}/api`;
+const API_DOMAIN = import.meta.env.VITE_BACKEND_URI; // e.g., "http://localhost"
+const API_PORT = import.meta.env.VITE_BACKEND_PORT; // e.g., "3000"
+
+// Build API base URL
+const API_BASE_URL = API_PORT
+  ? `${API_DOMAIN}:${API_PORT}/api`
+  : `${API_DOMAIN}/api`;
 
 export const getAllRecipes = async () => {
   const response = await axios.get(`${API_BASE_URL}`);
