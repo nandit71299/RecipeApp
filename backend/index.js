@@ -7,7 +7,14 @@ import { connectDb } from "./config/db.js";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+const corsOptions = {
+  origin: ["https://recipe-app-navy-alpha.vercel.app", "http://localhost:3000"], // allow Vercel and local frontend
+  methods: "GET,POST,PUT,PATCH,DELETE", // Allow specific methods
+  allowedHeaders: "Content-Type,Authorization", // Allow these headers
+  credentials: true, // Allow cookies and credentials if needed
+};
+
+app.use(cors(corsOptions)); // Use CORS with the specific options
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
