@@ -3,7 +3,9 @@ import Recipes from "../models/Recipes.js";
 export const getAll = async (req, res) => {
   try {
     const recipes = await Recipes.find();
-    res.send({ success: true, recipes: recipes });
+    setTimeout(() => {
+      res.send({ success: true, recipes: recipes });
+    }, 1500);
   } catch (error) {
     console.log(error);
     return res
@@ -21,7 +23,9 @@ export const getSingle = async (req, res) => {
         .status(404)
         .json({ success: false, error: "Recipe not found" });
     }
-    res.json({ success: true, recipe: recipe });
+    setTimeout(() => {
+      res.json({ success: true, recipe: recipe });
+    }, 1500);
   } catch (error) {
     console.log(error);
     return res
@@ -50,7 +54,9 @@ export const createRecipe = async (req, res) => {
 
   try {
     const savedRecipe = await newRecipe.save();
-    res.json({ success: true, recipe: savedRecipe });
+    setTimeout(() => {
+      res.json({ success: true, recipe: savedRecipe });
+    }, 1500);
   } catch (error) {
     console.log(error);
     return res
@@ -68,7 +74,9 @@ export const deleteRecipe = async (req, res) => {
         .status(404)
         .json({ success: false, error: "Recipe not found" });
     }
-    res.json({ success: true, message: "Recipe deleted successfully" });
+    setTimeout(() => {
+      res.json({ success: true, message: "Recipe deleted successfully" });
+    }, 1500);
   } catch (error) {
     console.log(error);
     return res
@@ -101,9 +109,11 @@ export const updateRecipe = async (req, res) => {
     const updatedRecipe = await Recipes.findByIdAndUpdate(id, updateObj);
     if (updatedRecipe) res.json({ success: true, recipe: updatedRecipe });
     else {
-      return res
-        .status(404)
-        .json({ success: false, error: "Recipe not found" });
+      setTimeout(() => {
+        return res
+          .status(404)
+          .json({ success: false, error: "Recipe not found" });
+      }, 1500);
     }
   } catch (error) {
     console.log(error);
