@@ -1,0 +1,28 @@
+.mainContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.menuItemsContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.menuItem {
+  color: goldenrod;
+  text-decoration: none;
+  margin: 0;
+}
+
+.linkActive {
+  color: rgb(255, 255, 255) !important ;
+  text-decoration: underline;
+}
+
+.logoText {
+  color: white;
+  font-size: 42px;
+  margin: 0;
+}

@@ -1,0 +1,137 @@
+/* Base card styles */
+.card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  transition: box-shadow 0.3s ease-in;
+  color: black;
+}
+
+.card > h2 {
+  margin: 0;
+  margin-top: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.cardImage {
+  width: 100%;
+  border-radius: 5px;
+  height: auto;
+}
+
+.card:hover {
+  box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.415);
+  transition: box-shadow 0.3s ease-in;
+}
+
+.author,
+.category {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.author {
+  color: gray;
+  font-size: small;
+}
+
+/* Portrait Layout */
+.portraitCardContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px; /* Space between image and content */
+  max-width: 250px; /* Ensure portrait card has a max width */
+  justify-content: center;
+}
+
+.card.portrait {
+  display: flex;
+  flex-direction: column; /* Stack image and content vertically */
+}
+
+.card.portrait .cardImage {
+  width: 200px; /* Fixed width for the image */
+  height: auto; /* Let the height adjust to maintain aspect ratio */
+}
+
+.card.portrait h2 {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.card.portrait .author,
+.card.portrait .category {
+  width: 100%;
+  font-size: 14px;
+}
+
+/* Wide Layout */
+.wideCardContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start; /* Align items at the top */
+  justify-content: center;
+  gap: 20px; /* Space between image and content */
+  max-width: 600px; /* Ensure wide card doesn't stretch too much */
+}
+
+.card.wide {
+  display: flex;
+  flex-direction: row; /* Stacking title and servings/prep time vertically */
+  width: 100%;
+  max-width: none; /* Remove max-width for the wide layout */
+  gap: 20px;
+}
+
+.card.wide .cardImage {
+  width: 150px; /* Set fixed width for the image */
+  height: 150px; /* Set fixed height for the image */
+}
+
+.card.wide h2 {
+  margin-top: 0; /* Remove margin-top for wide layout */
+  width: 100%;
+}
+
+.card.wide .textContent {
+  display: flex;
+  flex-direction: row; /* Display servings and prep time side by side */
+  gap: 10px;
+  justify-content: flex-start; /* Align the content at the start */
+  margin-top: 10px;
+}
+
+.card.wide .author,
+.card.wide .category {
+  font-size: 14px;
+}
+
+.btnsContainer {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: end;
+  gap: 10px;
+}
+
+.editBtn {
+  background-color: blue;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 20px;
+}
+
+.delBtn {
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 20px;
+}
