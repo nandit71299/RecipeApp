@@ -1,65 +1,39 @@
-import React, { Suspense } from "react";
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
 import Recipes from "../components/pageComponents/Recipes";
-import { getAllRecipes, updateRecipeById, addNewRecipe } from "../utils/http";
-import { Await, redirect, useLoaderData } from "react-router-dom";
+import { getAllRecipes } from "../utils/http";
 
 function Homepage() {
-  const data = useLoaderData();
-  const recipes = data?.recipes;
+  // Fetch the list of recipes
+  const { data, isLoading, isError, error, isFetching, isRefetching } =
+    useQuery({
+      queryKey: ["recipes"],
+      queryFn: getAllRecipes,
+    });
+
+  const recipes = data?.data?.recipes;
+
+  let content = "No Recipes Found";
+  if (isLoading || isFetching || isRefetching) {
+    content = "Loading Recipes..."; // Show loading while fetching or refetching
+  }
+
+  if (isError) {
+    content = "Error fetching recipes: " + error?.message;
+  }
 
   return (
     <div>
-      <div>
-        <h1>All Recipes</h1>
-      </div>
-      <Suspense fallback={<div>Loading....</div>}>
-        <Await resolve={recipes}>
-          {(resolvedRecipes) => {
-            return resolvedRecipes && resolvedRecipes.length > 0 ? (
-              <Recipes recipes={resolvedRecipes} />
-            ) : (
-              <p>No Recipes Found</p>
-            );
-          }}
-        </Await>
-      </Suspense>
-      <div></div>
+      <h1>All Recipes</h1>
+      {isLoading || isFetching || isRefetching ? (
+        <p>{content}</p>
+      ) : recipes && recipes.length > 0 ? (
+        <Recipes recipes={recipes} />
+      ) : (
+        <p>{content}</p>
+      )}
     </div>
   );
 }
+
 export default Homepage;
-
-async function loadRecipes() {
-  const response = await getAllRecipes();
-  return response.data;
-}
-export async function loader() {
-  return loadRecipes();
-}
-
-export async function action({ request, params }) {
-  const method = request.method;
-  const formData = await request.formData();
-
-  // Convert FormData to plain object
-  const data = {};
-  formData.forEach((value, key) => {
-    data[key] = value;
-  });
-
-  const id = params.id; // Retrieve the `id` from params
-
-  if (method === "PATCH" && id) {
-    const response = await updateRecipeById(id, data); // Pass the `id` along with form data
-    if (response.data.success) {
-      return redirect("/");
-    }
-  } else if (method === "POST") {
-    const response = await addNewRecipe(data);
-    if (response.data.success) {
-      return redirect("/");
-    }
-  } else {
-    return null;
-  }
-}

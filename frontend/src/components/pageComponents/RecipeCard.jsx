@@ -2,17 +2,15 @@ import React from "react";
 import styles from "./RecipeCard.module.css";
 import { Form, useActionData, useNavigate, useSubmit } from "react-router-dom";
 
-function RecipeCard({ orientation = "portrait", _id, recipe }) {
+function RecipeCard({
+  orientation = "portrait",
+  _id,
+  recipe,
+  handleDelete,
+  isDelLoading,
+  isDelPending,
+}) {
   const navigate = useNavigate();
-  const submit = useSubmit();
-
-  const handleDelete = () => {
-    const confirmation = window.confirm("Are you sure you want to delete?");
-    if (confirmation) {
-      submit(null, { method: "delete", action: "" });
-    }
-  };
-
   return (
     <div
       className={
@@ -48,8 +46,8 @@ function RecipeCard({ orientation = "portrait", _id, recipe }) {
             <button className={styles.editBtn} onClick={() => navigate("edit")}>
               Edit
             </button>
-            <button className={styles.delBtn} onClick={() => handleDelete()}>
-              Delete
+            <button className={styles.delBtn} onClick={() => handleDelete(_id)}>
+              {isDelPending || isDelLoading ? "Deleting..." : "Delete"}
             </button>
           </div>
         )}

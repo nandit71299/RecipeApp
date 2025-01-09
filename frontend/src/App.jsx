@@ -1,5 +1,6 @@
 import React, { lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 const Homepage = lazy(() => import("./pages/Homepage"));
 const Recipe = lazy(() => import("./components/pageComponents/Recipe"));
@@ -23,34 +24,20 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Homepage />,
-        loader: async () =>
-          import("./pages/Homepage").then((module) => module.loader()),
         id: "homepage",
       },
       { path: "/new", element: <AddNewRecipe /> },
       {
-        path: ":id", // This route is for individual recipes, ensuring the id is passed
-        loader: async ({ request, params }) =>
-          import("./components/pageComponents/Recipe").then((module) =>
-            module.loader({ request, params })
-          ),
+        path: ":id",
         id: "recipe",
         children: [
           {
             index: true,
             element: <Recipe />,
-            action: async ({ request, params }) =>
-              import("./components/pageComponents/Recipe").then((module) =>
-                module.action({ request, params })
-              ),
           },
           {
-            path: "edit", // Edit path for PATCH action
+            path: "edit",
             element: <EditRecipe />,
-            action: async ({ request, params }) =>
-              import("./pages/Homepage").then((module) =>
-                module.action({ request, params })
-              ),
           },
         ],
       },
@@ -58,10 +45,14 @@ const router = createBrowserRouter([
   },
 ]);
 
+const client = new QueryClient();
+
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
+      <QueryClientProvider client={client}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
     </>
   );
 }

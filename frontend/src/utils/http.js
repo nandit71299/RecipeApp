@@ -9,8 +9,15 @@ const API_BASE_URL = API_PORT
   : `${API_DOMAIN}/api`;
 
 export const getAllRecipes = async () => {
-  const response = await axios.get(`${API_BASE_URL}`);
-  return response;
+  try {
+    const response = await axios.get(`${API_BASE_URL}`);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw new Error(
+      error.response.data.message || error.message || "Failed to fetch recipes"
+    );
+  }
 };
 
 export const getRecipeById = async (id) => {
