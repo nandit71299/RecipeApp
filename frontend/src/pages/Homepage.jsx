@@ -1,7 +1,7 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Recipes from "../components/pageComponents/Recipes";
 import { getAllRecipes, updateRecipeById, addNewRecipe } from "../utils/http";
-import { redirect, useLoaderData } from "react-router-dom";
+import { Await, redirect, useLoaderData } from "react-router-dom";
 
 function Homepage() {
   const data = useLoaderData();
@@ -12,23 +12,29 @@ function Homepage() {
       <div>
         <h1>All Recipes</h1>
       </div>
-
-      <div>
-        {recipes && recipes.length > 0 ? (
-          <Recipes recipes={recipes} />
-        ) : (
-          <p>No Recipes Found</p>
-        )}
-      </div>
+      <Suspense fallback={<div>Loading....</div>}>
+        <Await resolve={recipes}>
+          {(resolvedRecipes) => {
+            return resolvedRecipes && resolvedRecipes.length > 0 ? (
+              <Recipes recipes={resolvedRecipes} />
+            ) : (
+              <p>No Recipes Found</p>
+            );
+          }}
+        </Await>
+      </Suspense>
+      <div></div>
     </div>
   );
 }
 export default Homepage;
 
-export async function loader() {
+async function loadRecipes() {
   const response = await getAllRecipes();
-
   return response.data;
+}
+export async function loader() {
+  return loadRecipes();
 }
 
 export async function action({ request, params }) {

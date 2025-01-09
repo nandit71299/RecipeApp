@@ -1,46 +1,56 @@
-import React from "react";
+import React, { lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import RootLayout from "./components/Layout/RootLayout";
-import AddNewRecipe from "./pages/AddNewRecipe";
-import EditRecipe from "./pages/EditRecipe";
-import Homepage, {
-  loader as homePageLoader,
-  action as recipeManipulationAction,
-} from "./pages/Homepage";
-import Recipe, {
-  loader as recipePageLoader,
-  action as recipeDeleteAction,
-} from "./components/pageComponents/Recipe";
-import ErrorPage from "./pages/ErrorPage";
+
+const Homepage = lazy(() => import("./pages/Homepage"));
+const Recipe = lazy(() => import("./components/pageComponents/Recipe"));
+const ErrorPage = lazy(() => import("./pages/ErrorPage"));
+const EditRecipe = lazy(() => import("./pages/EditRecipe"));
+const CircularLoader = lazy(() => import("./components/UI/CircularLoader"));
+const AddNewRecipe = lazy(() => import("./pages/AddNewRecipe"));
+const RootLayout = lazy(() => import("./components/Layout/RootLayout"));
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
+    hydrateFallbackElement: <CircularLoader />,
     errorElement: <ErrorPage />,
-    action: recipeManipulationAction,
+    action: async ({ request, params }) =>
+      import("./pages/Homepage").then((module) =>
+        module.action({ request, params })
+      ),
     children: [
       {
         index: true,
         element: <Homepage />,
-        loader: homePageLoader,
+        loader: async () =>
+          import("./pages/Homepage").then((module) => module.loader()),
         id: "homepage",
       },
       { path: "/new", element: <AddNewRecipe /> },
       {
         path: ":id", // This route is for individual recipes, ensuring the id is passed
-        loader: recipePageLoader,
+        loader: async ({ request, params }) =>
+          import("./components/pageComponents/Recipe").then((module) =>
+            module.loader({ request, params })
+          ),
         id: "recipe",
         children: [
           {
             index: true,
             element: <Recipe />,
-            action: recipeDeleteAction,
+            action: async ({ request, params }) =>
+              import("./components/pageComponents/Recipe").then((module) =>
+                module.action({ request, params })
+              ),
           },
           {
             path: "edit", // Edit path for PATCH action
             element: <EditRecipe />,
-            action: recipeManipulationAction, // The same action handling the PATCH
+            action: async ({ request, params }) =>
+              import("./pages/Homepage").then((module) =>
+                module.action({ request, params })
+              ),
           },
         ],
       },
