@@ -8,7 +8,7 @@ dotenv.config();
 
 const app = express();
 const corsOptions = {
-  origin: ["https://recipe-app-navy-alpha.vercel.app", "http://localhost:3000"], // allow Vercel and local frontend
+  origin: "*", // Allow all origins
   methods: "GET,POST,PUT,PATCH,DELETE", // Allow specific methods
   allowedHeaders: "Content-Type,Authorization", // Allow these headers
   credentials: true, // Allow cookies and credentials if needed
