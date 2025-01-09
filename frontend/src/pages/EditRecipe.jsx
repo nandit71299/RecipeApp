@@ -15,16 +15,19 @@ function EditRecipe() {
     staleTime: 0,
   });
 
-  const { mutate, isLoading: isUpdating } = useMutation({
+  const {
+    mutate,
+    isPending: isUpdating, // This is the state to control button text
+  } = useMutation({
     mutationFn: (updatedData) => updateRecipeById(id, updatedData),
     onSuccess: () => {
+      queryClient.invalidateQueries(["recipe"]);
       navigate(`/${id}`);
     },
   });
 
   const handleUpdateRecipe = (updatedData) => {
-    mutate(updatedData);
-    queryClient.invalidateQueries(["recipe"]);
+    mutate(updatedData); // Triggers the mutation when the form is submitted
   };
 
   if (isLoading) return "Loading recipe...";

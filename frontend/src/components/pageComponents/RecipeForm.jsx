@@ -1,22 +1,15 @@
 import React from "react";
 import styles from "./RecipeForm.module.css";
 
-function RecipeForm({
-  method,
-  recipe,
-  handleUpdateRecipe,
-  isUpdating,
-  handleCreateRecipe,
-  isCreatePending,
-}) {
+function RecipeForm({ method, recipe, handleUpdateRecipe, isUpdating }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const recipeData = Object.fromEntries(formData.entries());
-    if (method == "patch") {
-      handleUpdateRecipe(recipeData);
-    } else if (method == "post") {
-      handleCreateRecipe(recipeData);
+    if (method === "patch") {
+      handleUpdateRecipe(recipeData); // Trigger update
+    } else if (method === "post") {
+      handleCreateRecipe(recipeData); // (Assuming you have a create handler)
     }
   };
 
@@ -65,12 +58,11 @@ function RecipeForm({
         />
         <button className={styles.btn} type="submit">
           {isUpdating
-            ? "Updating..."
-            : method === "post"
-            ? isCreatePending
-              ? "Submitting..."
-              : "Submit"
-            : "Update"}
+            ? "Updating..." // Text during mutation
+            : method === "post" // If it's a post (create)
+            ? "Submit" // Text when creating a new recipe
+            : "Update"}{" "}
+          {console.log(isUpdating)}
         </button>
       </form>
     </div>
