@@ -32,11 +32,11 @@ function RecipeCard({
           {/* Text content for wide or portrait */}
           <div className={styles.textContent}>
             <p className={styles.category}>
-              <i className="fa-solid fa-clock"></i>
+              <i className="fa-solid fa-user"></i>
               &nbsp;{recipe?.servings} Servings
             </p>
             <p className={styles.author}>
-              <i className="fa-solid fa-user"></i>
+              <i className="fa-solid fa-clock"></i>
               &nbsp;{recipe?.prepTime} minutes
             </p>
           </div>
